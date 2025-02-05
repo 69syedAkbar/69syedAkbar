@@ -1,0 +1,19 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+df = pd.read_csv('final_jan1693700330.csv')
+df.head
+df.info
+df.describe()
+df.duplicated().sum()
+df['Result Time'].unique()
+df['Granularity Period'].unique()
+df['Object Name'].unique()
+sns.countplot(df['Granularity Period']).unique()
+df.isnull().sum()
+df.replace(np.nan,'0',inplace = True)
+df.isnull().sum()
+df.dtypes
+df[df['Number of Sent PNR Messages']==1].head()
+df.corr()
+sns.heatmap(df.corr())
