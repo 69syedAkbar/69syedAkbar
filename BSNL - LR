@@ -1,0 +1,34 @@
+import pandas as pd
+mydata = pd.read_csv("jan01.csv")
+mydata
+mydata.columns
+mydata.dtypes
+mydata.head()
+finaldata  = mydata.drop(['Unnamed: 0',"Number of PNA Messages with DIAMETER_ERROR_NO_SUBSCRIPTION_TO_DATA","Reliability","Number of PNA Messages with DIAMETER_ERROR_USER_DATA_NOT_RECOGNIZED","Number of PNA Messages with DIAMETER_SUCCESS","Number of PNA Messages with Other Errors","Response Percentage of PNR Messages","Number of Successful PNA Messages"],axis=1)
+finaldata["Successful Response Percentage of PNR Messages"].isnull().sum()
+finaldata.sourcefilename.median
+finaldata.describe()
+finaldata["Number of PNA Messages with DIAMETER_ERROR_TOO_MUCH_DATA"].describe()
+finaldata["Number of PNA Messages with DIAMETER_ERROR_TOO_MUCH_DATA"].value_counts()
+finaldata["Number of PNA Messages with DIAMETER_ERROR_TOO_MUCH_DATA"].fillna("S",inplace = True)
+y = finaldata[["Number of Unsuccessful PNA Messages"]]
+x = finaldata.drop(["Number of Unsuccessful PNA Messages"],axis = 1)
+x =pd.get_dummies(x)
+from sklearn.model_selection import train_test_split
+xtrain,xtest,ytrain,ytest = train_test_split(x,y,test_size= 0.20)
+from sklearn.linear_model import LogisticRegression
+lm = LogisticRegression()
+lm.fit(xtrain,ytrain)
+predicted_value=lm.predict(xtest)
+from sklearn.metrics import confusion_matrix
+confusion_matrix(ytest,predicted_value)
+import numpy as np
+np.random.seed(100)
+var1 = np.random.randint(0, 10, 50)
+var2 = var1 + np.random.normal(0, 10, 50)
+np.corrcoef(var1, var2)
+
+
+
+
+
