@@ -1,0 +1,120 @@
+import MySQLdb
+import csv
+import mysql.connector
+import sqlite3
+import pandas as pd
+try:
+    mydb = mysql.connector.connect(host="localhost", database = 'team2',user="root", passwd="faizan123",use_pure=True)
+    query = "Select * from pmresult_1693700331"
+    result_dataFrame = pd.read_sql(query,mydb)
+    mydb.close() #close the connection
+except Exception as e:
+    mydb.close()
+    print(str(e))
+    
+mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="faizan123",
+        database="team2"
+    )
+
+cx = pd.read_sql(query, mydb)
+cx.head()
+print(cx)
+
+import MySQLdb
+import csv
+import mysql.connector
+import sqlite3
+import pandas as pd
+try:
+    mydb = mysql.connector.connect(host="localhost", database = 'team2',user="root", passwd="faizan123",use_pure=True)
+    query = "Select * from pmresult_1693700332"
+    result_dataFrame = pd.read_sql(query,mydb)
+    mydb.close() #close the connection
+except Exception as e:
+    mydb.close()
+    print(str(e))
+    
+mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="faizan123",
+        database="team2"
+    )
+
+sh = pd.read_sql(query, mydb)
+sh.head()
+print(sh)
+
+cx=cx.apply(pd.to_numeric, errors='ignore')
+sh=sh.apply(pd.to_numeric, errors='ignore')
+
+cx.dtypes
+
+sh.dtypes
+
+cx=cx[cx.Reliability.notnull()]
+sh=sh[sh.Reliability.notnull()]
+
+cx.head()
+
+cx=cx.drop(columns=['Granularity Period','Reliability'],axis=0)
+sh=sh.drop(columns=['Granularity Period','Reliability'],axis=0)
+
+cx.columns
+
+import matplotlib.pyplot as plt
+import seaborn as sns  
+%matplotlib inline
+
+cx['Result Time'] = pd.to_datetime(cx['Result Time'])
+sh['Result Time'] = pd.to_datetime(sh['Result Time'])
+
+cx['Time'] = cx['Result Time'].dt.time
+sh['Time'] = sh['Result Time'].dt.time
+
+cx['Time'] = cx['Result Time'].dt.time
+sh['Time'] = sh['Result Time'].dt.time
+
+cx=cx.apply(pd.to_numeric, errors='ignore')
+sh=sh.apply(pd.to_numeric, errors='ignore')
+
+print(cx.dtypes)
+
+cx['Result Time'] = pd.to_datetime(cx['Result Time'])
+sh['Result Time'] = pd.to_datetime(sh['Result Time'])
+
+cx['day']=cx['Result Time'].dt.day_name() 
+sh['day']=sh['Result Time'].dt.day_name()
+
+cx['ATS Number']=cx['Object Name'].str[7:9]
+sh['ATS Number']=sh['Object Name'].str[7:9]
+
+cx['City']=cx['Object Name'].str[0:3]
+sh['City']=sh['Object Name'].str[0:3]
+
+cx.dtypes
+
+sh.dtypes
+
+print(cx.describe())
+
+cxonly=cx.drop(columns=['Number of Received Request Messages over Cx Interface of HSS','Number of Sent Request Messages over Cx Interface of HSS'],axis=0)
+
+print(cxonly.describe())
+
+print(sh.describe())
+
+shonly=sh.drop(columns=['Number of Received Request Messages over Sh Interface of HSS','Number of Sent Request Messages over Sh Interface of HSS'],axis=0)
+
+print(shonly.describe())
+
+merged_df = pd.merge(cxonly,shonly, on='Result Time')
+
+# Compute the correlation matrix
+corr_matrix = merged_df.corr()
+
+f,ax = plt.subplots(figsize=(20, 20))
+sns.heatmap(merged_df.corr(), annot=True, linewidths=.5, fmt= '.1f',ax=ax)
